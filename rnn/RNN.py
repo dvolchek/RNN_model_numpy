@@ -214,13 +214,13 @@ class RNNModel:
         bias_y : numpy.array
         bias : numpy.array
         """
-        den = np.sqrt(hidden_dim)
+        #den = np.sqrt(hidden_dim)
 
-        weights_y = np.random.randn(output_dim, hidden_dim) / den
+        weights_y = np.random.randn(output_dim, hidden_dim)# / den
         bias_y = np.zeros((output_dim, 1))
 
-        weights_ax = np.random.randn(hidden_dim, input_dim) / den
-        weights_aa = np.random.randn(hidden_dim, hidden_dim) / den
+        weights_ax = np.random.randn(hidden_dim, input_dim)# / den
+        weights_aa = np.random.randn(hidden_dim, hidden_dim)# / den
         bias = np.zeros((hidden_dim, 1))
 
         return weights_y, weights_ax, weights_aa, bias_y, bias
