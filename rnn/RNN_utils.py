@@ -8,7 +8,6 @@ class Softmax:
     """
     def __init__(self):
         self.type = 'Softmax'
-        #self.eps = 1e-15
 
     def forward(self, Z):
         """
@@ -77,8 +76,6 @@ class CrossEntropyLoss:
     """
     def __init__(self):
         self.type = 'CELoss'
-        #self.eps = 1e-15
-        #self.softmax = Softmax()
     
     def forward(self, Y_hat, Y):
         """

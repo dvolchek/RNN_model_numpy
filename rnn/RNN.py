@@ -31,7 +31,41 @@ class RNNModel:
         self.oparams = None
 
 
-    def forward(self, input_X):
+    # def forward(self, input_X):
+    #     """
+    #     Прямой проход по сети
+
+    #     Parameters
+    #     ----------
+    #     input_X : numpy.array or list
+    #         Массив входных данных (батч)
+
+    #     Returns
+    #     -------
+    #     y_preds : list
+    #         Массив предсказаний, которые выдает сеть
+    #         для каждого входного данного
+    #     """
+    #     self.input_X = input_X
+
+    #     self.layers_tanh = [Tanh() for x in input_X]
+    #     hidden = np.zeros((self.hidden_dim , 1))
+        
+    #     self.hidden_list = [hidden]
+    #     self.y_preds = []
+
+    #     for input_x, layer_tanh in zip(input_X, self.layers_tanh):
+    #         input_tanh = np.dot(self.Wax, input_x) + np.dot(self.Waa, hidden) + self.b
+    #         hidden = layer_tanh.forward(input_tanh)
+    #         self.hidden_list.append(hidden)
+
+    #         input_softmax = np.dot(self.Wya, hidden) + self.by
+    #         y_pred = self.softmax.forward(input_softmax)
+    #         self.y_preds.append(y_pred)
+
+    #     return self.y_preds
+
+    def forward(self):
         """
         Прямой проход по сети
 
@@ -46,24 +80,7 @@ class RNNModel:
             Массив предсказаний, которые выдает сеть
             для каждого входного данного
         """
-        self.input_X = input_X
-
-        self.layers_tanh = [Tanh() for x in input_X]
-        hidden = np.zeros((self.hidden_dim , 1))
-        
-        self.hidden_list = [hidden]
-        self.y_preds = []
-
-        for input_x, layer_tanh in zip(input_X, self.layers_tanh):
-            input_tanh = np.dot(self.Wax, input_x) + np.dot(self.Waa, hidden) + self.b
-            hidden = layer_tanh.forward(input_tanh)
-            self.hidden_list.append(hidden)
-
-            input_softmax = np.dot(self.Wya, hidden) + self.by
-            y_pred = self.softmax.forward(input_softmax)
-            self.y_preds.append(y_pred)
-
-        return self.y_preds
+        print('Hello')  
 
 
     def loss(self, Y):
