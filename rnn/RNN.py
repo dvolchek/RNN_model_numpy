@@ -4,21 +4,20 @@ from RNN_utils import Tanh, Softmax, CrossEntropyLoss
 
 class RNNModel:
     """
-    Recurrent neural network implementation.
+    Модель рекуррентной нейронной сети
     """
     def __init__(self, input_dim, output_dim, hidden_dim):
         """
-        Initialize the parameters with the input, output and hidden
-        dimensions. 
+        Инициализация параметров ячейки RNN 
 
         Parameters
         ----------
         input_dim : int
-            Dimension of the input. 
+            Размерность входа 
         output_dim : int
-            Dimension of the output.
+            Размерность выхода
         hidden_dim : int
-            Number of units in the RNN cell.
+            Размерность скрытого состояния
         """
         self.input_dim = input_dim
         self.output_dim = output_dim
@@ -34,19 +33,18 @@ class RNNModel:
 
     def forward(self, input_X):
         """
-        Computes the forward propagation of the RNN.
+        Прямой проход по сети
 
         Parameters
         ----------
         input_X : numpy.array or list
-            List containing all the inputs that will be used to 
-            propagete along the RNN cell.
+            Массив входных данных (батч)
 
         Returns
         -------
         y_preds : list
-            List containing all the preditions for each input of the
-            input_X list.
+            Массив предсказаний, которые выдает сеть
+            для каждого входного данного
         """
         self.input_X = input_X
 
@@ -70,17 +68,17 @@ class RNNModel:
 
     def loss(self, Y):
         """
-        Computes the Cross Entropy Loss for the predicted values.
+        Вычисление лосса (Кросс энтропия)
 
         Parameters
         ----------
         Y : numpy.array or list
-            List containing the real labels to predict.
+            Массив истинных откликов
 
         Returns
         -------
         cost : int
-            Cost of the given model.
+            Значение лосса
         """
         self.Y = Y
         self.layers_loss = [CrossEntropyLoss() for y in self.Y]
@@ -94,10 +92,9 @@ class RNNModel:
 
     def backward(self):  
         """
-        Computes the backward propagation of the model.
+        Обратное распространение
 
-        Defines and updates the gradients of the parameters to used
-        in order to actulized the weights.
+        Вычисление градиентов, обновление весов
         """
         gradients = self._define_gradients()
         self.dWax, self.dWaa, self.dWya, self.db, self.dby, dhidden_next = gradients
@@ -124,13 +121,12 @@ class RNNModel:
 
     def clip(self, clip_value):
         """
-        Clips the gradients in order to avoisd the problem of 
-        exploding gradient.
+        Клиппинг градиентов во избежание взрывов градиентов
 
         Parameters
         ----------
         clip_value : int
-            Number that will be used to clip the gradients.
+            Пороговое значение для отсечения
         """
         for gradient in [self.dWax, self.dWaa, self.dWya, self.db, self.dby]:
             np.clip(gradient, -clip_value, clip_value, out=gradient)
@@ -138,13 +134,12 @@ class RNNModel:
 
     def optimize(self, method):
         """
-        Updates the parameters of the model using a given optimize 
-        method.
+        Обновление параметров модели в соответствии с методом оптимизации
 
         Parameters
         ----------
         method: Class
-            Method to use in order to optimize the parameters.
+            Метод оптимизации
         """
         weights = [self.Wya, self.Wax, self.Waa, self.by, self.b]
         gradients = [self.dWya, self.dWax, self.dWaa, self.dby, self.db]
@@ -157,18 +152,17 @@ class RNNModel:
         self, index_to_character
     ):
         """
-        Generates a random names with the pretrained RNN.
+        Генерация имен
 
         Parameters
         ----------
         index_to_character : dict
-            Dictionary that relates the indexes with the letters
-            to be used in order to create the name.
+            Словарь для получения символов на основе индексов
 
         Returns
         -------
         name : list
-            List containing the final name predicted.
+            Сгенерированное имя
         """
         letter = None
         indexes = list(index_to_character.keys())
@@ -176,11 +170,11 @@ class RNNModel:
         letter_x = np.zeros((self.input_dim, 1))
         name = []
 
-        # similar to forward propagation.
+        # Очень похоже на forward prop
         layer_tanh = Tanh()
         hidden = np.zeros((self.hidden_dim , 1))
 
-        while letter != '\n' and len(name)<15:
+        while letter != '\n' and len(name) < 15:
 
             input_tanh = np.dot(self.Wax, letter_x) + np.dot(self.Waa, hidden) + self.b
             hidden = layer_tanh.forward(input_tanh)
@@ -201,14 +195,14 @@ class RNNModel:
 
     def _initialize_parameters(self, input_dim, output_dim, hidden_dim):
         """
-        Initialize the parameters randomly.
+        Инициализация параметров
 
         Parameters
         ----------
         input_dim : int
-            Dimension of the input
+            Размерность входа
         output_dim : int
-            Dimension of the ouput
+            Разменость выхода
         hidden_dim : int
 
         Returns
@@ -233,7 +227,7 @@ class RNNModel:
 
     def _define_gradients(self):
         """
-        Defines the gradients of the model.
+        Инициализация градиентов
         """
         dWax = np.zeros_like(self.Wax)
         dWaa = np.zeros_like(self.Waa)

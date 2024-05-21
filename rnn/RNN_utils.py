@@ -3,8 +3,7 @@ import numpy as np
 
 class Softmax:
     """
-    Class for the Softmax function.
-    Applies the softmax function to a given input:
+    Класс для реализации функции Softmax
     :math:`Softmax(x_i) = \frac{e^{x_i}}{\sum_{j=1}e^{x_j}}`
     """
     def __init__(self):
@@ -13,15 +12,15 @@ class Softmax:
 
     def forward(self, Z):
         """
-        Computes the forward propagation.
+        Непосредственно Softmax
         Parameters
         ----------
         Z : numpy.array
-            Input.
+            Вход
         Returns
         -------
         A : numpy.array
-            Output.
+            Выход
         """
         self.Z = Z
 
@@ -33,8 +32,7 @@ class Softmax:
 
 class Tanh:
     """
-    Class for the Hyperbolic tangent activation function.
-    Applies the hyperbolic tangent function:
+    Класс для реализации гиперболического тангенса
     :math:`Tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}`  
     """
     def __init__(self):
@@ -42,15 +40,15 @@ class Tanh:
 
     def forward(self, Z):
         """
-        Computes the forward propagation.
+        Непосредственно Tanh
         Parameters
         ----------
         Z : numpy.array
-            Input.
+            Вход
         Returns
         -------
         A : numpy.array
-            Output.
+            Выход
         """
         self.A = np.tanh(Z)
 
@@ -58,15 +56,15 @@ class Tanh:
 
     def backward(self, dA):
         """
-        Computes the backward propagation.
+        Вычисления для обратного распространения
         Parameters
         ----------
         dA : numpy.array
-            Gradients of the activation function output.
+            Градиенты выходов
         Returns
         -------
         dZ : numpy.array
-            Gradients of the activation function input.
+            Градиенты входов
         """
         dZ = dA * (1 - np.power(self.A, 2))
 
@@ -75,18 +73,7 @@ class Tanh:
 
 class CrossEntropyLoss:
     """
-    Class that implements the Cross entropy loss function.
-    Given a target math:`y` and an estimate math:`\hat{y}` the 
-    Cross Entropy loss can be written as:
-    .. math::
-        \begin{aligned}
-            l_{\hat{y}, class} = -\log\left(\frac{\exp(\hat{y_n}[class])}{\sum_j \exp(\hat{y_n}[j])}\right), \\
-            L(\hat{y}, y) = \frac{\sum^{N}_{i=1} l_{i, class[i]}}{\sum^{N}_{i=1} weight_{class[i]}},
-        \end{aligned}
-    References
-    ----------
-    .. [1] Wikipedia - Cross entropy:
-       https://en.wikipedia.org/wiki/Cross_entropy    
+    Класс для реализации вычисления кросс-энтропии
     """
     def __init__(self):
         self.type = 'CELoss'
@@ -95,17 +82,17 @@ class CrossEntropyLoss:
     
     def forward(self, Y_hat, Y):
         """
-        Computes the forward propagation.
+        Непосредственное вычисление лосса
         Parameters
         ----------
         Y_hat : numpy.array
-            Array containing the predictions.
+            Предсказания
         Y : numpy.array
-            Array with the real labels.
+            Истинные отклики
         
         Returns
         -------
-        Numpy.arry containing the cost.
+        Numpy.array -- значение лосса
         """
         self.Y = Y
         self.Y_hat = Y_hat
@@ -117,11 +104,11 @@ class CrossEntropyLoss:
 
     def backward(self):
         """
-        Computes the backward propagation.
+        Вычисления для обратного распространения
         Returns
         -------
         grad : numpy.array
-            Array containg the gradients of the weights.
+            Градиент лосса
         """
         grad = self.Y_hat - self.Y
         
@@ -130,35 +117,16 @@ class CrossEntropyLoss:
 
 class SGD:
     """
-    Class that implements the gradient descent algorithm.
-    The formula (with momentum) can be expressed as:
-    .. math::
-        \begin{aligned}
-            v_{t+1} & = \beta * v_{t} + (1 - \beta) * g_{t+1}, \\
-            w_{t+1} & = w_{t} - \text{lr} * v_{t+1},
-        \end{aligned}
-    where :math:`w`, :math:`g`, :math:`v` and :math:`\beta` denote the 
-    parameters, gradient, velocity, and beta respectively.
-    References
-    ----------
-    .. [1] Wikipedia - Stochastic gradient descent:
-       https://en.wikipedia.org/wiki/Stochastic_gradient_descent
-    
-    .. [2] Sutskever, Ilya, et al. "On the importance of 
-       initialization and momentum in deep learning." International
-       conference on machine learning. PMLR, 2013.
-       http://www.cs.toronto.edu/~hinton/absps/momentum.pdf
-    .. [3] PyTorch - Stochastic gradient descent:
-       https://pytorch.org/docs/stable/optim.html
+    Стохастический градиентный спуск (momentum)
     """
     def __init__(self, lr=0.0075, beta=0.9):
         """
         Parameters
         ----------
         lr : int, default: 0.0075
-            Learing rate to use for the gradient descent.
+            Скорость обучения
         beta : int, default: 0.9
-            Beta parameter.
+            Параметр бетта
         """
         self.beta = beta
         self.lr = lr
@@ -168,25 +136,24 @@ class SGD:
         Parameters
         ---------
         weights : numpy.array
-            Weigths of a given layer.
+            Веса слоя
         bias : numpy.array
-            Bias of a given layer.
+            Смещения
         dW : numpy.array
-            The gradients of the weights.
+            Градиенты весов
         db : numpy.array
-            The gradients of the bias
+            Градиенты смещений
         velocities : tuple
-            Tuple containing the velocities to compute the gradient
-            descent with momentum.
+            Tuple с velocities для SGD c momentum.
         Returns
         -------
         weights : numpy.array
-            Updated weigths of the given layer.
+            Обновленные веса
         bias : numpy.array
-            Updated bias of the given layer.
+            Обновленные смещения
         (V_dW, V_db) : tuple
-            Tuple of ints containing the velocities for the weights
-            and biases.
+            Tuple из int'ов, содержащий velocities для весов
+            и смещений
         """
         if velocities is None: velocities = [0 for weight in weights]
 
@@ -203,8 +170,8 @@ class SGD:
 
     def _update_velocities(self, gradients, beta, velocities):
         """
-        Updates the velocities of the derivates of the weights and 
-        bias.
+        Обновляет velocities производных для 
+        весов и смещений
         """
         new_velocities = []
 
@@ -218,20 +185,19 @@ class SGD:
 
 def one_hot_encoding(input, size):
     """
-    Do one hot encoding for a given input and size.
+    One hot encoding
     
     Parameters
     ----------
     input : list
-        list containing the numbers to make the 
-        one hot encoding
+        Список, который нужно закодировать
     size : int
-        Maximum size of the one hot encoding.
+        Размер
         
     Returns
     -------
     output : list
-        List with the one hot encoding arrays.
+        Результат one hot
     """
     output = []
 
